@@ -22,24 +22,20 @@ Este quiz foi criado como um exercício de reforço de conhecimento em linguagen
 - CSS3
 - JavaScript (ES6)
 
-## 📸 Demonstração
-
-> *Adicione aqui um GIF ou imagem da interface do quiz, se desejar.*
-
 ## 💡 Como Usar
 
 1. Clone este repositório:
    ```bash
-   git clone https://github.com/SEU_USUARIO/quiz-programacao.git
+   git clone https://github.com/THierry-DV/Quizz_de_Programacao.git
 
 Navegue até a pasta do projeto:
 
-cd quiz-programacao
+cd quizz_de_programacao
 
 
 📁 Estrutura do Projeto
 ```
-quiz-programacao/
+quiz_de_programacao/
 ├── index.html         # Página principal do quiz
 ├── style.css          # Estilização com CSS
 ├── script.js          # Lógica do quiz em JavaScript
