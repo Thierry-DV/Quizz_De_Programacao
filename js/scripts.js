@@ -1,156 +1,112 @@
-// Elementos da interface
 const question = document.querySelector("#question");
 const answersBox = document.querySelector("#answers-box");
-const quizzContainer = document.querySelector("#quizz-container");
+const quizContainer = document.querySelector("#quizz-container");
 const scoreContainer = document.querySelector("#score-container");
-const restartBtn = document.querySelector("#restart");
+const progressBarFill = document.querySelector("#progress-fill");
+const feedbackMessage = document.querySelector("#feedback-message");
 
-// Controle
-const letters = ['a', 'b', 'c', 'd'];
-let points = 0;
+const letters = ["a", "b", "c", "d"];
 let actualQuestion = 0;
+let points = 0;
 
-// Perguntas do quiz
 const questions = [
   {
-    question: "PHP foi desenvolvido para qual fim?",
+    question: "O que significa HTML?",
     answers: [
-      { answer: "back-end", correct: true },
-      { answer: "front-end", correct: false },
-      { answer: "Sistema operacional", correct: false },
-      { answer: "Banco de dados", correct: false },
-    ]
-  },
-  {
-    question: "Uma forma de declarar variável em JavaScript:",
-    answers: [
-      { answer: "$var", correct: false },
-      { answer: "var", correct: true },
-      { answer: "@var", correct: false },
-      { answer: "#let", correct: false },
-    ]
-  },
-  {
-    question: "Qual o seletor de id no CSS?",
-    answers: [
-      { answer: "#", correct: true },
-      { answer: ".", correct: false },
-      { answer: "@", correct: false },
-      { answer: "/", correct: false },
-    ]
-  },
-  {
-    question: "Qual tag usamos para inserir uma imagem no HTML?",
-    answers: [
-      { answer: "<img>", correct: true },
-      { answer: "<image>", correct: false },
-      { answer: "<pic>", correct: false },
-      { answer: "<src>", correct: false },
-    ]
-  },
-  {
-    question: "Qual destes é um framework JavaScript?",
-    answers: [
-      { answer: "Laravel", correct: false },
-      { answer: "Django", correct: false },
-      { answer: "React", correct: true },
-      { answer: "Spring", correct: false },
-    ]
-  },
-  {
-    question: "Em CSS, qual propriedade altera a cor do texto?",
-    answers: [
-      { answer: "background-color", correct: false },
-      { answer: "font-color", correct: false },
-      { answer: "color", correct: true },
-      { answer: "text-decoration", correct: false },
-    ]
-  },
-  {
-    question: "Qual comando exibe dados no console em JS?",
-    answers: [
-      { answer: "log()", correct: false },
-      { answer: "print()", correct: false },
-      { answer: "console.log()", correct: true },
-      { answer: "echo()", correct: false },
-    ]
-  },
-  {
-    question: "Qual destes armazena múltiplos valores?",
-    answers: [
-      { answer: "string", correct: false },
-      { answer: "boolean", correct: false },
-      { answer: "array", correct: true },
-      { answer: "number", correct: false },
+      { answer: "Linguagem de Marcação de Hipertexto", correct: true },
+      { answer: "Linguagem de Programação", correct: false },
+      { answer: "Hiperlink e Texto de Marcação", correct: false },
+      { answer: "Ferramenta de Estilo de Página", correct: false }
     ]
   },
   {
     question: "Qual linguagem é usada para estilizar páginas web?",
     answers: [
-      { answer: "HTML", correct: false },
-      { answer: "JavaScript", correct: false },
-      { answer: "CSS", correct: true },
       { answer: "Python", correct: false },
+      { answer: "HTML", correct: false },
+      { answer: "CSS", correct: true },
+      { answer: "Java", correct: false }
     ]
   },
   {
-    question: "O que significa DOM?",
+    question: "Qual desses é um framework JavaScript?",
     answers: [
-      { answer: "Document Object Model", correct: true },
-      { answer: "Data Output Management", correct: false },
-      { answer: "Developer Only Mode", correct: false },
-      { answer: "Design Orientation Map", correct: false },
+      { answer: "React", correct: true },
+      { answer: "Django", correct: false },
+      { answer: "Laravel", correct: false },
+      { answer: "Bootstrap", correct: false }
     ]
   },
+  {
+    question: "O que o comando 'console.log()' faz?",
+    answers: [
+      { answer: "Mostra uma caixa de alerta", correct: false },
+      { answer: "Cria uma variável", correct: false },
+      { answer: "Exibe uma mensagem no console", correct: true },
+      { answer: "Executa um loop", correct: false }
+    ]
+  }
 ];
 
-// Início do quiz
 function init() {
   createQuestion(0);
 }
 
-// Cria a pergunta e respostas
-function createQuestion(i) {
-  // Limpa respostas anteriores
-  answersBox.innerHTML = "";
 
+function createQuestion(i) {
   const current = questions[i];
+
+  answersBox.innerHTML = "";
+  feedbackMessage.classList.add("hide");
+  feedbackMessage.textContent = "";
+
   question.querySelector("#question-text").textContent = current.question;
   question.querySelector("#question-number").textContent = i + 1;
 
   current.answers.forEach((answer, index) => {
-    const answerTemplate = document.querySelector(".answer-template").cloneNode(true);
+    const answerTemplate = document
+      .querySelector(".answer-template")
+      .cloneNode(true);
 
     answerTemplate.classList.remove("hide", "answer-template");
-
     answerTemplate.querySelector(".btn-letter").textContent = letters[index];
-    answerTemplate.querySelector(".question-answer").textContent = answer.answer;
+    answerTemplate.querySelector(".question-answer").textContent =
+      answer.answer;
     answerTemplate.setAttribute("correct-answer", answer.correct);
 
     answersBox.appendChild(answerTemplate);
   });
 
-  // Adiciona evento de clique
-  answersBox.querySelectorAll("button").forEach(button => {
-    button.addEventListener("click", () => checkAnswer(button));
-  });
+  answersBox
+    .querySelectorAll("button")
+    .forEach((btn) => btn.addEventListener("click", () => checkAnswer(btn)));
 
   actualQuestion++;
+
+  const progress = ((actualQuestion - 1) / questions.length) * 100;
+  progressBarFill.style.width = `${progress}%`;
 }
 
-// Checagem da resposta
-function checkAnswer(selectedBtn) {
+function checkAnswer(btn) {
   const buttons = answersBox.querySelectorAll("button");
+  const isCorrect = btn.getAttribute("correct-answer") === "true";
 
-  buttons.forEach(btn => {
-    const isCorrect = btn.getAttribute("correct-answer") === "true";
-
-    btn.classList.add(isCorrect ? "correct-answer" : "wrong-answer");
-
-    if (btn === selectedBtn && isCorrect) {
-      points++;
-    }
+  buttons.forEach((button) => {
+    const correct = button.getAttribute("correct-answer") === "true";
+    button.classList.add(correct ? "correct-answer" : "wrong-answer");
   });
+
+  feedbackMessage.classList.remove("hide");
+  if (isCorrect) {
+    feedbackMessage.textContent = "✅ Resposta correta!";
+    feedbackMessage.classList.remove("wrong-feedback");
+    feedbackMessage.classList.add("correct-feedback");
+    points++;
+  } else {
+    feedbackMessage.textContent = "❌ Resposta incorreta!";
+    feedbackMessage.classList.remove("correct-feedback");
+    feedbackMessage.classList.add("wrong-feedback");
+  }
 
   setTimeout(() => {
     if (actualQuestion >= questions.length) {
@@ -158,10 +114,9 @@ function checkAnswer(selectedBtn) {
     } else {
       createQuestion(actualQuestion);
     }
-  }, 1000);
+  }, 1500);
 }
 
-// Mostra pontuação final
 function showSuccessMessage() {
   hideOrShowQuizz();
 
@@ -169,21 +124,29 @@ function showSuccessMessage() {
   document.querySelector("#display-score span").textContent = score;
   document.querySelector("#correct-answers").textContent = points;
   document.querySelector("#questions-qty").textContent = questions.length;
+
+  const messageEl = scoreContainer.querySelector("h2");
+
+  if (score >= 80) {
+    messageEl.textContent = "🎉 Incrível! Você domina programação!";
+  } else if (score >= 50) {
+    messageEl.textContent = "👏 Bom trabalho! Mas ainda dá pra melhorar!";
+  } else {
+    messageEl.textContent = "📘 Vamos estudar mais e tentar de novo!";
+  }
 }
 
-// Alterna entre quiz e resultado
 function hideOrShowQuizz() {
-  quizzContainer.classList.toggle("hide");
+  quizContainer.classList.toggle("hide");
   scoreContainer.classList.toggle("hide");
 }
 
-// Reinicia o quiz
-restartBtn.addEventListener("click", () => {
-  points = 0;
+document.querySelector("#restart").addEventListener("click", () => {
   actualQuestion = 0;
+  points = 0;
+  progressBarFill.style.width = "0%";
   hideOrShowQuizz();
   init();
 });
 
-// Inicialização automática
 init();
