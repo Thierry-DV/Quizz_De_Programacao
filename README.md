@@ -38,14 +38,13 @@ cd quiz-programacao
 
 
 📁 Estrutura do Projeto
-bash
-Copiar
-Editar
+```
 quiz-programacao/
 ├── index.html         # Página principal do quiz
 ├── style.css          # Estilização com CSS
 ├── script.js          # Lógica do quiz em JavaScript
 └── README.md          # Documentação do projeto
+```
 🧪 Possíveis Melhorias Futuras
 Adicionar mais perguntas via API ou JSON externo
 
